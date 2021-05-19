@@ -142,40 +142,43 @@ def profile_view(request, pk):
 
 
 @login_required
-def profile_update_view(request, pk):
-    user = User.objects.get(id=pk)
-    if user.is_student:
-        student = StudentProfileModel.objects.get(user=user)
-    if user.is_publisher:
-        publisher = PublisherProfileModel.objects.get(user=user)
+def publisher_edit_profile(request):
+    profile = PublisherProfileModel.objects.get(user=request.user)
 
+    form = PublisherProfileUpdateForm(instance=profile)
     if request.method == 'POST':
-
-        u_form = UserUpdateForm(request.POST, instance=user)
-
-        if user.is_student:
-            p_form = StudentProfileUpdateForm(request.POST, request.FILES, instance=student)
-        if user.is_publisher:
-            p_form = PublisherProfileUpdateForm(request.POST, request.FILES, instance=publisher)
-
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request, 'Successfully Updated')
-            return redirect(profile_update_view, pk=pk)
-    else:
-        u_form = UserUpdateForm(instance=user)
-        if user.is_student:
-            p_form = StudentProfileUpdateForm(instance=student)
-        if user.is_publisher:
-            p_form = PublisherProfileUpdateForm(instance=publisher)
+        form = PublisherProfileUpdateForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', request.user.id)
+        else:
+            return redirect('profile-update')
 
     context = {
-        'u_form': u_form,
-        'p_form': p_form,
+        'form': form,
+        'profile': profile,
     }
+    return render(request, 'edit-profile.html', context)
 
-    return render(request, 'student/student-edit-profile.html', context)
+
+@login_required
+def student_edit_profile(request):
+    profile = StudentProfileModel.objects.get(user=request.user)
+
+    form = StudentProfileUpdateForm(instance=profile)
+    if request.method == 'POST':
+        form = StudentProfileUpdateForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', request.user.id)
+        else:
+            return redirect('profile-update')
+
+    context = {
+        'form': form,
+        'profile': profile,
+    }
+    return render(request, 'edit-profile.html', context)
 
 
 def about_view(request):
