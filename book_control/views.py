@@ -42,6 +42,10 @@ def pub_book_detail_view(request, slug):
         book.save()
         return redirect('pub-book-detail', book.slug)
 
+    if request.GET.get('deleteBook'):
+        book.delete()
+        return redirect('publisher-dashboard')
+
     return render(request, 'publisher/pub-book-detail.html', {'book': book})
 
 
