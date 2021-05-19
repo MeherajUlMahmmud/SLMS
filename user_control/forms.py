@@ -51,15 +51,6 @@ class PublisherRegistrationForm(UserCreationForm):
         fields = ("name", "email", "password1", "password2", "is_publisher")
 
 
-class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField(max_length=255, help_text='Required. Add a valid email address')
-    name = forms.CharField(max_length=60)
-
-    class Meta:
-        model = User
-        fields = ('name', 'email')
-
-
 class StudentProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = StudentProfileModel
