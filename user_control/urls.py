@@ -16,7 +16,8 @@ urlpatterns = [
     path('publisher/publisher-dashboard', publisher_dashboard_view, name='publisher-dashboard'),
 
     path('profile/<str:pk>', profile_view, name='profile'),
-    path('profile/edit/<str:pk>', profile_update_view, name='profile-update'),
+    path('publisher-profile/edit-profile', publisher_edit_profile, name='publisher-edit-profile'),
+    path('student-profile/edit-profile', student_edit_profile, name='student-edit-profile'),
 
     path('account-settings/', account_settings, name='settings'),
     path('about', about_view, name='about'),
