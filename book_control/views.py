@@ -69,7 +69,7 @@ def post_book_view(request):
             slug_str = "%s %s" % (obj.name, obj.edition)
             obj.slug = slugify(slug_str)
             obj.save()
-            return render(request, 'publisher/publisher-dashboard.html')
+            return redirect('publisher-dashboard')
         else:
             print("Error: Form Invalid")
             print(form.errors)
