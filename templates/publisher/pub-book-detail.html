@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <div class="card mb-4 mt-4">
+                {% if book.image %}
+                <img src="{{ book.image.url }}"
+                     class="card-img-top"
+                     alt="{{ book.name }}"
+                />
+                {% else %}
+                <img
+                        src="{% static 'assets/images/placeholder.png' %}"
+                        class="card-img-top"
+                        alt="{{ book.name }}"
+                />
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6 mt-4">
+
+            <div class="row">
+
+                <div class="col-6">
+                    <a href="{% url 'update-book' book.id %}" class="btn btn-block btn-primary btn-md">
+                        Update Book
+                    </a>
+                </div>
+
+
+                <div class="col-6 mb-3">
+
+                    <button
+                            type="button"
+                            class="btn btn-block btn-danger btn-md"
+                            data-mdb-ripple-color="#000000"
+                            data-mdb-toggle="modal"
+                            data-mdb-target="#exampleModal">Delete Book
+                    </button>
+
+                </div>
+
+
+                {% if book.available %}
+                <div class="col-12">
+                    <form method="GET">
+                        <input class="btn btn-block btn-danger btn-md" name="unavailableBook" type="submit"
+                               value="Make Book Unavailable"/>
+                    </form>
+                </div>
+                {% else %}
+                <div class="col-12">
+                    <form method="GET">
+                        <input class="btn btn-block btn-success btn-md" name="availableBook" type="submit"
+                               value="Make Book Available"/>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="row mt-4">
+
+                <div class="card">
+                    <div class="card-header">
+                        <p><strong>University: </strong>{{ book.university }}</p>
+                        <p><strong>Department: </strong>{{ book.department }}</p>
+                        <p><strong>Course: </strong>{{ book.course }}</p>
+                        <br/>
+                        <p><strong>Author: </strong>{{ book.author }}</p>
+                        <p><strong>Edition: </strong>{{ book.edition }} edition</p>
+                        <p><strong>Price: </strong>{{ book.price }} BDT</p>
+                    </div>
+                    <div class="card-body">
+
+                        <p class="card-text note note-info">
+                            <strong>Description: </strong>{{ book.description|linebreaksbr }}
+                        </p>
+
+                        <div class="card-footer">Posted: {{ book.created }}</div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Posted by <a href="{% url 'profile' book.publisher.user.id %}" class="text-info mr-2">
+                        {{ book.publisher.user.name }}</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Are you sure?
+                </h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-mdb-dismiss="modal"
+                        aria-label="Close"
+                ></button>
+
+            </div>
+            <div class="modal-body">
+                Deleting <b>{{ book.name }}</b> Book
+
+                <form method="GET" action="">
+
+                    <input name="bookID" type="text" value="{{ book.id }}" hidden/>
+
+                    <input type="submit" name="delete Book"
+                           class="btn btn-danger btn-block mt-2"
+                           value="Delete Book"/>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</p>
+
+{% endblock %}

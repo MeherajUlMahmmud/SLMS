@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="container-fluid p-5">
+    <div class="row">
+
+        <div class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+
+            <div class="card mb-3">
+              {% if user.is_student %}
+
+                {% if user.studentprofilemodel.image %}
+                <img alt="{{ user.name }}" class="card-img-top" src="{{ user.studentprofilemodel.image.url }}">
+                {% else %}
+                <img alt="{{ user.name }}" class="card-img-top" src="{% static 'assets/img/p1.jpg' %}">
+                {% endif %}
+
+              {% else %}
+                {% if user.publisherprofilemodel.logo %}
+                <img alt="{{ user.name }}" class="card-img-top" src="{{ user.publisherprofilemodel.logo.url }}">
+                {% else %}
+                <img alt="{{ user.name }}" class="card-img-top" src="{% static 'assets/img/p1.jpg' %}">
+                {% endif %}
+
+              {% endif %}
+                <div class="card-body">
+                    <h2 class="card-title">{{ user.name }}</h2>
+
+                    {% if user.is_student %}
+                      <h5>Student</h5>
+                    {% else %}
+                      <h5>Publisher</h5>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-muted" style="text-align: center">
+                    Member Since {{ user.date_joined.date }}
+                </div>
+
+                {% if request.user == student.user %}
+                <div class="card-footer">
+                    <a class="btn btn-primary btn-block" href="{% url 'student-profile-update' request.user.id %}">
+                        <i class="fas fa-pencil-alt me-2"></i>Edit Profile
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+
+        <div class="col-12 col-sm-12 col-md-7 col-lg-8 col-xl-9">
+
+          <div class="container">
+            <h2>Profile Info</h2>
+
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+                {{ form.media }}
+              {{ u_form.as_p }}
+              {{ p_form.as_p }}
+              <button class="btn btn-primary" type="submit" name="update">Update</button>
+            </form>
+          </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

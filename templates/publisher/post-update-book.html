@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="mt-4 d-flex justify-content-center">
+
+            <div class="my-4" style="background-color: transparent;">
+
+                <div class="card-header text-center">
+                    <h3 class="text-black">{{ task }} Book</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="bookform" data-departments-url="{% url 'ajax_load_departments' %}"
+                          data-courses-url="{% url 'ajax_load_courses' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.media }}
+
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3">
+                                {{ form.name|add_class:"form-control" }}
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3">
+                                {{ form.university|add_class:"form-control" }}
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3">
+                                {{ form.department|add_class:"form-control" }}
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3">
+                                {{ form.course|add_class:"form-control" }}
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3">
+                                {{ form.image|add_class:"form-control" }}
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3">
+                                {{ form.author|add_class:"form-control" }}
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3">
+                                {{ form.edition|add_class:"form-control" }}
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3">
+                                {{ form.description|add_class:"form-control" }}
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3">
+                                {{ form.price|add_class:"form-control" }}
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg btn-block">{{ task }} Book</button>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_university").change(function () {
+        var url = $("#bookform").attr("data-departments-url");
+        var university = $(this).val();
+        $.ajax({
+            url: url,
+            data: {
+                'university': university
+            },
+            success: function (data) {
+                $("#id_department").html(data);
+            }
+        });
+    });
+
+    $("#id_department").change(function () {
+        var url = $("#bookform").attr("data-courses-url");
+        var departmentId = $(this).val();
+        var university = $("#id_department").val();
+        $.ajax({
+            url: url,
+            data: {
+                'university': university,
+                'department': departmentId
+            },
+            success: function (data) {
+                $("#id_course").html(data);
+            }
+        });
+    });
+
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% load static %}
+{% block content %}
+
+<nav id="sidebar" class="sidebar-wrapper">
+            <div class="sidebar-content">
+                <div class="sidebar-brand">
+                    <div id="close-sidebar" class="ms-auto">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <!-- sidebar-header  -->
+                <!-- sidebar-search  -->
+                <div id="sidebar-wrapper">
+                    <ul class="sidebar-nav">
+
+
+                        <li class="sidebar-brand" {% if not category %}class="selected" {% endif %}>
+                            <a class="category" href="{% url 'books:book_list' %}">All Books</a>
+                        </li>
+                        <li class="sidebar-brand "> <a class="category"> Departments </a> </li>
+                        {% for c in departments %}
+                        <li class="sidebar-brand" {% if department.slug == c.slug %}class="selected" {% endif %}>
+                            <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                        </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+                <!-- sidebar-menu  -->
+            </div>
+            <!-- sidebar-content  -->
+        </nav>
+        <!-- sidebar-wrapper  -->
+
+        <main class="page-content">
+
+            <div class="container">
+
+                <div class="row mt-5 allproducts">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <nav aria-label="breadcrumb text-center">
+                            <ol class="breadcrumb" style="background-color: #fff!important;">
+                                <li class="breadcrumb-item product active" aria-current="page">
+                                    {% if department %}{{ department.name }}{% else %}All Depatments{% endif %}
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 mt-3 text-center">
+                        <p id="showproduct">Showing {{ books.start_index }}-{{ books.end_index }} of {{ books.paginator.count }} results</p>
+                    </div>
+
+                </div>
+                <!-- end page title section  -->
+
+                <!-- ======= All Product Section ======= -->
+                <section id="portfolio" class="portfolio mt-5 mb-3">
+                    <div class="container">
+                        <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
+
+                            <!-- start 1st product -->
+                            {% for book in books %}
+                            <div class="col-lg-3 col-md-4 col-sm-4 portfolio-item filter-app">
+                                <div class="portfolio-wrap" onclick="window.location = ('{{ book.get_absolute_url }}')">
+                                    <img width="400" height="400" src="{% if book.image %}{{ book.image.url }}{% else %}{% static ' img/no_image.png ' %}{% endif %}" class="img-fluid" alt="" />
+
+                                    <div class="portfolio-info">
+                                        <div class="portfolio-links">
+                                            <a href="assets/images/card1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 1">
+                                                <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+                                            </a>
+                                            <!--<a href="{% url 'books:book_list' %}" class="heart" title="Add to wishlist">
+                                                <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                            </a>-->
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="card-body">
+                                    <a href="{{ product.get_absolute_url }}{{current_query}}" style="text-decoration: none; color: #555">
+                                        <p class="card-text">
+                                            {{ book.name }}
+                                        </p>
+                                        <p>
+                                            <!--<del><span>$59.99</span></del>-->
+                                            <span>${{ book.price }}</span>
+                                        </p>
+                                    </a>
+                                </div>
+
+                            </div>
+                            {% endfor %}
+                            <!-- end of first product -->
+                        </div>
+
+
+
+                        <div class="row ">
+                            <div class="col-lg-12 col-md-12 col-sm-12 mb-5">
+                                <nav aria-label="Page navigation example">
+                                    {% if books.has_other_pages%}
+                                    <ul class="pagination justify-content-center">
+                                        {% if books.has_previous %}
+                                        <li class="page-item">
+                                            <a href="?page={{books.previous_page_number}}" class="page-link">&laquo;</a>
+                                        </li>
+                                        {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link">&laquo;</a>
+                                        </li>
+                                        {% endif %} {% for i in books.paginator.page_range %} {% if books.number == i %}
+                                        <li class="page_item active">
+                                            <a class="page-link">{{i}}</a>
+                                        </li>
+                                        {% else %}
+                                        <li class="page-item"></li>
+                                        <a href="?page={{i}}" class="page-link"></a>
+                                        {% endif %} {% endfor %} {% if books.has_next %}
+                                        <li class="page-item">
+                                            <a href="?page={{books.next_page_number}}" class="page-link">&raquo;</a>
+                                        </li>
+                                        {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link">&raquo;</a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                    {% endif %}
+                                </nav>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </section>
+                <!-- End Product Section -->
+
+            </div>
+
+
+{% endblock %}

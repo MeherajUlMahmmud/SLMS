@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+
+
+<div class="login-form col-lg-5" style="margin: 50px auto;
+  	                            font-size: 15px;">
+
+    <form method="post" style="margin-bottom: 15px;
+                                background: #f7f7f7;
+                                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+                                padding: 30px;">
+        {% csrf_token %}
+        <h2 class="text-center mb-5">Log In</h2>
+        <div class="row form-group">
+            <div class="col-md-12 mb-3 mb-md-0">
+                {{ form.email|attr:"autofocus" }}
+
+                {% for error in form.email.errors %}
+                <li class="small text-danger">
+                    {{ error }}
+                </li>
+                {% endfor %}
+
+                <p class="small mt-1">{{ form.email.help_text|safe }}</p>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12 mb-3 mb-md-0">
+                {{ form.password }}
+
+                {% for error in form.password.errors %}
+                <li class="small text-danger">
+                    {{ error }}
+                </li>
+                {% endfor %}
+
+                <p class="small mt-1">{{ form.password.help_text|safe }}</p>
+            </div>
+        </div>
+
+
+        {% if form.non_field_errors %}
+        <ul class='form-errors'>
+            {% for error in form.non_field_errors %}
+            <li class="small text-danger">{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <div class="row form-group mb-4">
+            <div class="col-md-12 mb-3 mb-md-0">
+                <input type="submit" value="Login" class="btn px-4 btn-primary form-control text-white">
+            </div>
+        </div>
+
+
+    </form>
+</div>
+
+<script>
+    var form_fields = document.getElementsByTagName("input")
+
+    form_fields[1].placeholder = 'Email'
+    form_fields[2].placeholder = 'Password'
+
+    for (var i = 1; i < form_fields.length; i++) {
+        form_fields[i].classList += 'form-control';
+    }
+
+
+
+
+</script>
+
+{% endblock %}

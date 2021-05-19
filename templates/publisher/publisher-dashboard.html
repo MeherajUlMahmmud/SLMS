@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mt-4">
+            <h4 class="mt-3">Recent Books</h4>
+            <div class="row  mt-2 ">
+                {% if books %}
+                {% for book in books %}
+                <div class="col">
+                    <div class="card" style="width: 18rem;">
+                        <div class="bg-image">
+
+                            {% if book.image %}
+                            <img
+                                    src="{{ book.image.url }}"
+                                    class="card-img-top"
+                                    alt="..."
+                            />
+                            {% else %}
+                            <img
+                                    src="{% static 'assets/images/placeholder.png' %}"
+                                    class="card-img-top"
+                                    alt="..."
+                            />
+                            {% endif %}
+
+<!--                            <div class="mask" style="background-color: rgba(0, 0, 0, 0.3)">-->
+<!--                                <div class="d-flex justify-content-center align-items-center h-100">-->
+<!--                                    <p class="text-white mb-0 fs-6 text-center">-->
+<!--                                        {{ book.name }}-->
+<!--                                    </p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+
+                        <div class="card-header">
+                            <h5 class="card-title fs-6"><strong>Title: </strong>{{ book.name }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text fs-6">
+                                <strong>Price: </strong>{{ book.price }}<br/>
+
+                            </p>
+
+                            <a href="{% url 'pub-book-detail' book.slug %}" type="button" class="btn btn-primary mb-2">
+                                See More<i class="fas fa-arrow-right ms-2"></i></a>
+
+                            <div class="card-footer">
+                                <p class="fs-6"><b>Posted:</b> {{ book.created }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor%}
+                {% else %}
+                <p class="mt-5 text-muted">No Books Added.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Sidebar Widgets Column -->
+        <div class="col-md-4 mt-4">
+            <a class="btn btn-success btn-block rounded" href="{% url 'post-book' %}">
+                <i class="fas fa-plus me-2"></i>Post New Book</a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
