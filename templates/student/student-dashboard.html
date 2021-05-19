@@ -1,24 +1,71 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% load widget_tweaks %}
 
 {% block content %}
+
 <div class="container">
 
     {% if not request.user.studentprofilemodel.department_name %}
     <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
         In order to see the books, You have to complete your profile first!
-        <a href="#" class="btn btn-success text-white text-center rounded ms-5"><i
+        <a href="{% url 'student-edit-profile' %}" class="btn btn-success text-white text-center rounded ms-5"><i
                 class="fas fa-plus me-2"></i> Add Now</a>
     </div>
+    {% else %}
+
+    {% if book_list %}
+
+    {% for book in book_list %}
+    <div class="col-lg-4">
+        <div class="card" style="width: 18rem;">
+            <div class="bg-image">
+                {% if book.image %}
+                <img
+                        src="{{ book.image.url }}"
+                        class="card-img-top"
+                        alt="{{ book.name }}"
+                />
+                {% else %}
+                <img
+                        src="{% static 'assets/images/placeholder.png' %}"
+                        class="card-img-top"
+                        alt="{{ book.name }}"
+                />
+                {% endif %}
+            </div>
+
+            <div class="card-header">
+                <p class="card-title fs-6"><strong>Location: </strong> {{ ad_item.location }}</p>
+            </div>
+            <div class="card-body">
+                <p class="card-text fs-6">
+                    <strong>Facing: </strong>{{ ad_item.facing }}<br/>
+
+                </p>
+
+                <a href="{% url 'ad-detail' ad_item.pk %}" type="button" class="btn btn-primary mb-2">
+                    See More<i class="fas fa-arrow-right ms-2"></i></a>
+
+                <div class="card-footer">
+                    <p class="fs-6">Posted: {{ ad_item.date_posted|timesince }} ago</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% else %}
+    <p class="mt-5 text-muted">No books yet.</p>
+    {% endif %}
+
     {% endif %}
 
     <h2 class="mt-3">Student Dashboard</h2>
     <div class="col-md-4 mt-4">
-            <a class="btn btn-success btn-block rounded" href="{% url 'books:book_list' %}">
-                <i class="me-2"></i>All Books</a>
+        <a class="btn btn-success btn-block rounded" href="#">
+            <i class="me-2"></i>All Books</a>
     </div>
 </div>
-
 
 {% endblock %}
