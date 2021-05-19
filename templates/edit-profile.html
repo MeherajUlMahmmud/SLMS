@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+
+<div class="container-fluid p-5">
+    {% if user.is_publisher %}
+    <div class="row">
+
+        <div class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+
+            <div class="card mb-3">
+                {% if profile.image %}
+                <img alt="{{ user.name }}" class="card-img-top" src="{{profile.image.url}}">
+                {% else %}
+                <img alt="{{ user.name }}" class="card-img-top" src="{% static 'assets/images/user-placeholder.png' %}">
+                {% endif %}
+                <div class="card-body">
+                    <h2 class="card-title">{{ request.user.name }}</h2>
+                </div>
+                <div class="card-footer text-muted" style="text-align: center">
+                    Member Since {{request.user.date_joined.date}}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-12 col-sm-12 col-md-7 col-lg-8 col-xl-9">
+
+            <div class="card text-left mb-3">
+                <div class="card-header">
+                    <h4 class="card-title">Edit Profile</h4>
+                </div>
+                <form action="" class="p-4 p-md-5 border rounded" enctype="multipart/form-data" method="post">
+
+                    {% csrf_token %}
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Phone Number</label>
+                                        {{ form.phone|add_class:"form-control" }}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 col-md-12">
+                                <div class="form-group">
+                                    <label>Click here to update photo</label>
+                                    {{ form.image|add_class:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12">
+                        <button class="btn btn-block btn-primary btn-md" type="submit">Update Profile</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    {% elif user.is_student %}
+    <div class="row">
+
+        <div class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+
+            <div class="card mb-3">
+                {% if profile.image %}
+                <img alt="{{ user.name }}" class="card-img-top" src="{{profile.image.url}}">
+                {% else %}
+                <img alt="{{ user.name }}" class="card-img-top" src="{% static 'others/img/no_image.png' %}">
+                {% endif %}
+                <div class="card-body">
+                    <h2 class="card-title">{{ request.user.name }}</h2>
+                </div>
+                <div class="card-footer text-muted" style="text-align: center">
+                    Member Since {{request.user.date_joined.date}}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-12 col-sm-12 col-md-7 col-lg-8 col-xl-9">
+
+            <div class="card text-left mb-3">
+                <div class="card-header">
+                    <h4 class="card-title">Edit Profile</h4>
+                </div>
+                <form action="" class="p-4 p-md-5 border rounded" enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    {{ form.media }}
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+
+                                <div class="row">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">University</label>
+                                            {{ form.varsity_name|add_class:"form-control" }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Department</label>
+                                            {{form.department_name|add_class:"form-control"}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Phone Number</label>
+                                            {{ form.phone|add_class:"form-control" }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-form-label">Gender</label>
+                                            {{form.gender|add_class:"form-control"}}
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-form-label">Date of Birth</label>
+                                            {{ form.birth_date|add_class:"form-control" }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Click here to update photo</label>
+                                            {{ form.image|add_class:"form-control" }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Address</label>
+                                            {{ form.address|add_class:"form-control" }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12">
+                        <button class="btn btn-block btn-primary btn-md" type="submit">Update Profile</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+    {% endif %}
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_varsity_name").change(function () {
+        var url = $("#bookform").attr("data-departments-url");
+        var university = $(this).val();
+        $.ajax({
+            url: url,
+            data: {
+                'university': university
+            },
+            success: function (data) {
+                $("#id_department_name").html(data);
+            }
+        });
+    });
+
+
+</script>
+
+{% endblock %}
+
