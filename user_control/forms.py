@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import authenticate
+
+from book_control.models import UniversityModel
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
@@ -52,6 +54,10 @@ class PublisherRegistrationForm(UserCreationForm):
 
 
 class StudentProfileUpdateForm(forms.ModelForm):
+    # varsity_name = forms.ModelChoiceField(queryset=UniversityModel.objects.all())
+    # department_name = forms.ChoiceField()
+    birth_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
     class Meta:
         model = StudentProfileModel
         fields = ('image', 'phone', 'varsity_name', 'department_name', 'gender', 'address', 'birth_date')
