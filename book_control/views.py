@@ -6,6 +6,7 @@ from user_control.models import User
 from .models import DepartmentModel, BookModel
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import *
+from carts.utils import *
 
 
 # @login_required
@@ -30,6 +31,11 @@ from .forms import *
 
 
 def pub_book_detail_view(request, slug):
+    pending_orders = get_pending_orders(request)
+    unpaid_orders = get_unpaid_orders(request)
+    orders_to_deliver = get_orders_to_deliver(request)
+    completed_orders = get_completed_orders(request)
+
     book = BookModel.objects.get(slug=slug)
 
     if request.GET.get('unavailableBook'):
@@ -46,16 +52,48 @@ def pub_book_detail_view(request, slug):
         book.delete()
         return redirect('publisher-dashboard')
 
-    return render(request, 'publisher/pub-book-detail.html', {'book': book})
+    context = {
+        'book': book,
+
+        'pending_orders': pending_orders,
+        'unpaid_orders': unpaid_orders,
+        'orders_to_deliver': orders_to_deliver,
+        'completed_orders': completed_orders,
+    }
+
+    return render(request, 'publisher/pub-book-detail.html', context)
 
 
 def stu_book_detail_view(request, slug):
+    pending_orders = get_pending_orders(request)
+    unpaid_orders = get_unpaid_orders(request)
+    orders_to_deliver = get_orders_to_deliver(request)
+    completed_orders = get_completed_orders(request)
+
+    student = StudentProfileModel.objects.get(user=request.user)
     book = BookModel.objects.get(slug=slug)
-    return render(request, 'student/stu-book-detail.html', {'book': book})
+
+    if request.GET.get('orderBook'):
+        new_order = OrderModel(student=student, book=book, )
+        return redirect('pub-book-detail', book.slug)
+    context = {
+        'book': book,
+
+        'pending_orders': pending_orders,
+        'unpaid_orders': unpaid_orders,
+        'orders_to_deliver': orders_to_deliver,
+        'completed_orders': completed_orders,
+    }
+    return render(request, 'student/stu-book-detail.html', context)
 
 
 @login_required
 def post_book_view(request):
+    pending_orders = get_pending_orders(request)
+    unpaid_orders = get_unpaid_orders(request)
+    orders_to_deliver = get_orders_to_deliver(request)
+    completed_orders = get_completed_orders(request)
+
     task = "Post New"
     form = PostBookForm()
 
@@ -75,19 +113,34 @@ def post_book_view(request):
             print(form.errors)
             context = {
                 'task': task,
-                'form': form
+                'form': form,
+
+                'pending_orders': pending_orders,
+                'unpaid_orders': unpaid_orders,
+                'orders_to_deliver': orders_to_deliver,
+                'completed_orders': completed_orders,
             }
             return render(request, 'publisher/post-update-book.html', context)
 
     context = {
         'task': task,
         'form': form,
+
+        'pending_orders': pending_orders,
+        'unpaid_orders': unpaid_orders,
+        'orders_to_deliver': orders_to_deliver,
+        'completed_orders': completed_orders,
     }
 
     return render(request, 'publisher/post-update-book.html', context)
 
 
 def update_book_view(request, pk):
+    pending_orders = get_pending_orders(request)
+    unpaid_orders = get_unpaid_orders(request)
+    orders_to_deliver = get_orders_to_deliver(request)
+    completed_orders = get_completed_orders(request)
+
     task = "Update"
     book = BookModel.objects.get(id=pk)
     form = PostBookForm(instance=book)
@@ -103,13 +156,23 @@ def update_book_view(request, pk):
             print(form.errors)
             context = {
                 'task': task,
-                'form': form
+                'form': form,
+
+                'pending_orders': pending_orders,
+                'unpaid_orders': unpaid_orders,
+                'orders_to_deliver': orders_to_deliver,
+                'completed_orders': completed_orders,
             }
             return render(request, 'publisher/post-update-book.html', context)
 
     context = {
         'task': task,
         'form': form,
+
+        'pending_orders': pending_orders,
+        'unpaid_orders': unpaid_orders,
+        'orders_to_deliver': orders_to_deliver,
+        'completed_orders': completed_orders,
     }
 
     return render(request, 'publisher/post-update-book.html', context)
@@ -117,6 +180,7 @@ def update_book_view(request, pk):
 
 def load_departments(request):
     university = request.GET.get('university')
+    print(university)
     departments = DepartmentModel.objects.filter(university=university)
     return render(request, 'departments.html', {'departments': departments})
 
