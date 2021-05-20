@@ -39,6 +39,45 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'contact' %}">Contact</a>
             </li>
+
+                {% if request.user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
+                       data-mdb-toggle="dropdown"
+                       href="#" id="navbarDropdownMenuLink1" role="button">
+                        Orders
+                    </a>
+                    {% if request.user.is_publisher %}
+                    <div aria-labelledby="navbarDropdownMenuLink1" class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'publisher-unchecked-orders' %}">Unchecked Orders
+                            <span class="badge bg-primary ms-2">{{ pending_orders|length }}</span></a>
+
+                        <a class="dropdown-item" href="{% url 'publisher-unpaid-orders' %}">Unpaid Orders
+                            <span class="badge bg-primary ms-2">{{ unpaid_orders|length }}</span></a>
+
+                        <a class="dropdown-item" href="{% url 'publisher-orders-to-deliver' %}">Orders to Deliver
+                            <span class="badge bg-primary ms-2">{{ ads_to_run|length }}</span></a>
+
+                        <a class="dropdown-item" href="{% url 'publisher-completed-orders' %}">Completed Orders
+                            <span class="badge bg-primary ms-2">{{ finished_ads|length }}</span></a>
+                    </div>
+                    {% elif request.user.is_student %}
+                    <div aria-labelledby="navbarDropdownMenuLink1" class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'student-pending-orders' %}">Pending Orders
+                            <span class="badge bg-primary ms-2">{{ pending_orders|length }}</span></a>
+
+                        <a class="dropdown-item" href="{% url 'student-unpaid-orders' %}">Unpaid Orders
+                            <span class="badge bg-primary ms-2">{{ unpaid_orders|length }}</span></a>
+
+                        <a class="dropdown-item" href="{% url 'student-orders-to-deliver' %}">Orders to Deliver
+                            <span class="badge bg-primary ms-2">{{ ads_to_run|length }}</span></a>
+
+                        <a class="dropdown-item" href="{% url 'student-completed-orders' %}">Completed Orders
+                            <span class="badge bg-primary ms-2">{{ finished_ads|length }}</span></a>
+                    </div>
+                    {% endif %}
+                </li>
+                {% endif %}
         </ul>
 
         {% if request.user.is_authenticated %}
