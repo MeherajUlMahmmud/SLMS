@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.text import slugify
 
+from carts.forms import ConfirmOrderForm
 from user_control.models import User
 from .models import DepartmentModel, BookModel
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -73,11 +74,32 @@ def stu_book_detail_view(request, slug):
     student = StudentProfileModel.objects.get(user=request.user)
     book = BookModel.objects.get(slug=slug)
 
-    if request.GET.get('orderBook'):
-        new_order = OrderModel(student=student, book=book, )
-        return redirect('pub-book-detail', book.slug)
+    form = ConfirmOrderForm()
+    if request.method == 'POST':
+        form = ConfirmOrderForm(request.POST)
+        if form.is_valid():
+            new_order = form.save(commit=False)
+            new_order.student = student
+            new_order.book = book
+
+            new_order.price_rate = book.price
+
+            form.save()
+            return redirect('home')
+        else:
+            context = {
+                'book': book,
+                'form': form,
+
+                'pending_orders': pending_orders,
+                'unpaid_orders': unpaid_orders,
+                'orders_to_deliver': orders_to_deliver,
+                'completed_orders': completed_orders,
+            }
+            return render(request, 'user_control/customer/confirm-order.html', context)
     context = {
         'book': book,
+        'form': form,
 
         'pending_orders': pending_orders,
         'unpaid_orders': unpaid_orders,
