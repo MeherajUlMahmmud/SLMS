@@ -15,7 +15,7 @@
                 {% if profile.image %}
                 <img alt="{{ user.name }}" class="card-img-top" src="{{profile.image.url}}">
                 {% else %}
-                <img alt="{{ user.name }}" class="card-img-top" src="{% static 'assets/images/user-placeholder.png' %}">
+                <img alt="{{ user.name }}" class="card-img-top" src="{% static 'others/img/no_image.png' %}">
                 {% endif %}
                 <div class="card-body">
                     <h2 class="card-title">{{ request.user.name }}</h2>
@@ -41,10 +41,20 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Phone Number</label>
-                                        {{ form.phone|add_class:"form-control" }}
+
+                                <div class="row">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Location</label>
+                                            {{ form.location|add_class:"form-control" }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Website</label>
+                                            {{ form.website|add_class:"form-control" }}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -52,13 +62,25 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-12 col-md-12">
-                                <div class="form-group">
-                                    <label>Click here to update photo</label>
-                                    {{ form.image|add_class:"form-control" }}
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Phone Number</label>
+                                            {{ form.phone|add_class:"form-control" }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Click here to update logo</label>
+                                            {{ form.logo|add_class:"form-control" }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
 
@@ -100,7 +122,8 @@
                 <div class="card-header">
                     <h4 class="card-title">Edit Profile</h4>
                 </div>
-                <form action="" class="p-4 p-md-5 border rounded" enctype="multipart/form-data" method="post">
+                <form id="profileEditForm" class="p-4 p-md-5 border rounded" method="post"
+                      data-departments-url="{% url 'ajax_load_departments' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form.media }}
 
@@ -119,7 +142,7 @@
                                     <div class="col-12 col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label">Department</label>
-                                            {{form.department_name|add_class:"form-control"}}
+                                            {{ form.department_name|add_class:"form-control" }}
                                         </div>
                                     </div>
                                 </div>
@@ -172,19 +195,29 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
-    $("#id_varsity_name").change(function () {
-        var url = $("#bookform").attr("data-departments-url");
-        var university = $(this).val();
-        $.ajax({
-            url: url,
-            data: {
-                'university': university
-            },
-            success: function (data) {
-                $("#id_department_name").html(data);
-            }
-        });
-    });
+<!--    $("#id_varsity_name").change(function () {-->
+<!--        var url = $("#profileEditForm").attr("data-departments-url");-->
+<!--        var university = $(this).val();-->
+<!--        $.ajax({-->
+<!--            url: url,-->
+<!--            data: {-->
+<!--                'university': university-->
+<!--            },-->
+<!--            success: function (data) {-->
+<!--                $("#id_department_name").html(data);-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+
+<!--    $("#id_department_name").change(function () {-->
+<!--        var departmentId = $("#id_department_name").val();-->
+<!--        $.ajax({-->
+<!--            url: url,-->
+<!--            data: {-->
+<!--                'department': departmentId-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
 
 
 </script>
