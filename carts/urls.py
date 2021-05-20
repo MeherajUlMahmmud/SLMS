@@ -3,7 +3,6 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('confirm-order/<str:pk>', confirm_order_view, name='confirm-order'),
     path('order-details/<str:pk>', order_details_view, name='order-details'),
 
     path('publisher/unchecked-orders/', publisher_unchecked_order_view, name='publisher-unchecked-orders'),
