@@ -4,11 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.utils.text import slugify
-
-from book_control.models import BookModel
 from .forms import *
 from .models import *
 from .decorators import *
+from carts.utils import *
 
 
 @unauthenticated_user
@@ -99,26 +98,54 @@ def logout_view(request):
 
 @login_required
 def student_dashboard_view(request):
-    return render(request, 'student/student-dashboard.html')
+    pending_orders = get_pending_orders(request)
+    unpaid_orders = get_unpaid_orders(request)
+    orders_to_deliver = get_orders_to_deliver(request)
+    completed_orders = get_completed_orders(request)
+
+    books = BookModel.objects.all()
+
+    # print(profile.department_name)
+    context = {
+        'book_list': books,
+
+        'pending_orders': pending_orders,
+        'unpaid_orders': unpaid_orders,
+        'orders_to_deliver': orders_to_deliver,
+        'completed_orders': completed_orders,
+    }
+    return render(request, 'student/student-dashboard.html', context)
 
 
 @login_required
 def publisher_dashboard_view(request):
+    pending_orders = get_pending_orders(request)
+    unpaid_orders = get_unpaid_orders(request)
+    orders_to_deliver = get_orders_to_deliver(request)
+    completed_orders = get_completed_orders(request)
+
     current_user = request.user
     publisher = PublisherProfileModel.objects.get(user=current_user)
     books = BookModel.objects.filter(publisher=publisher)
 
-    print(len(books))
-    for book in books:
-        print(book.name)
     context = {
         'books': books,
+
+        'pending_orders': pending_orders,
+        'unpaid_orders': unpaid_orders,
+        'orders_to_deliver': orders_to_deliver,
+        'completed_orders': completed_orders,
     }
     return render(request, 'publisher/publisher-dashboard.html', context)
 
 
 @login_required
 def profile_view(request, pk):
+    pending_orders = get_pending_orders(request)
+    unpaid_orders = get_unpaid_orders(request)
+    orders_to_deliver = get_orders_to_deliver(request)
+    completed_orders = get_completed_orders(request)
+
     user = User.objects.get(id=pk)
     context = {
     }
@@ -126,16 +153,38 @@ def profile_view(request, pk):
     if user.is_publisher:
         profile = PublisherProfileModel.objects.get(user=user)
 
+        location_link = "https://maps.google.com/maps?width=100%25&amp;height=450&amp;hl=en&amp;q="
+
+        if profile.location is not None:
+            locations = profile.location.split(' ')
+            location_link = "https://maps.google.com/maps?width=100%25&amp;height=450&amp;hl=en&amp;q="
+
+            for location in locations:
+                location_link += location + "%20"
+
+            location_link += "&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+
         context = {
             'user': user,
             'profile': profile,
+            'location_link': location_link,
+
+            'pending_orders': pending_orders,
+            'unpaid_orders': unpaid_orders,
+            'orders_to_deliver': orders_to_deliver,
+            'completed_orders': completed_orders,
         }
     elif user.is_student:
         profile = StudentProfileModel.objects.get(user=user)
 
         context = {
             'user': user,
-            'profile': profile
+            'profile': profile,
+
+            'pending_orders': pending_orders,
+            'unpaid_orders': unpaid_orders,
+            'orders_to_deliver': orders_to_deliver,
+            'completed_orders': completed_orders,
         }
 
     return render(request, 'profile.html', context)
@@ -143,6 +192,11 @@ def profile_view(request, pk):
 
 @login_required
 def publisher_edit_profile(request):
+    pending_orders = get_pending_orders(request)
+    unpaid_orders = get_unpaid_orders(request)
+    orders_to_deliver = get_orders_to_deliver(request)
+    completed_orders = get_completed_orders(request)
+
     profile = PublisherProfileModel.objects.get(user=request.user)
 
     form = PublisherProfileUpdateForm(instance=profile)
@@ -152,40 +206,103 @@ def publisher_edit_profile(request):
             form.save()
             return redirect('profile', request.user.id)
         else:
-            return redirect('profile-update')
+            print(form.errors)
+            return redirect('publisher-edit-profile')
 
     context = {
         'form': form,
         'profile': profile,
+        'pending_orders': pending_orders,
+        'unpaid_orders': unpaid_orders,
+        'orders_to_deliver': orders_to_deliver,
+        'completed_orders': completed_orders,
     }
     return render(request, 'edit-profile.html', context)
 
 
 @login_required
 def student_edit_profile(request):
+    pending_orders = get_pending_orders(request)
+    unpaid_orders = get_unpaid_orders(request)
+    orders_to_deliver = get_orders_to_deliver(request)
+    completed_orders = get_completed_orders(request)
+
     profile = StudentProfileModel.objects.get(user=request.user)
+    universities = UniversityModel.objects.all()
 
     form = StudentProfileUpdateForm(instance=profile)
+
     if request.method == 'POST':
         form = StudentProfileUpdateForm(request.POST, request.FILES, instance=profile)
+
+        # varsityId = request.POST.get('varsity_name')
+        # departmentId = request.POST.get('department_name')
+        #
+        # varsity = UniversityModel.objects.get(id=varsityId)
+        # department = DepartmentModel.objects.get(id=departmentId)
+
+        # print(request.POST)
+
+        # print(varsity)
+        # print(department)
+
+        # form.fields['varsity_name'] = varsity
+        # form.fields['department_name'] = department
+
+        # print(form.fields['varsity_name'])
+        # print(form.fields['department_name'])
+        # print(form.fields['phone'])
+        # print(form.fields['gender'])
+        # print(form.fields['birth_date'])
+
+        # updated_request = request.POST.copy()
+        # updated_request.__setitem__('varsity_name', varsity.university)
+        # updated_request.__setitem__('department_name', department.department)
+        # form = StudentProfileUpdateForm(updated_request)
+        #
+        # print(request.POST)
+        # print(updated_request)
+
         if form.is_valid():
             form.save()
             return redirect('profile', request.user.id)
         else:
-            return redirect('profile-update')
+            print(form.errors)
+            return redirect('student-edit-profile')
 
     context = {
         'form': form,
+        'universities': universities,
         'profile': profile,
+        'pending_orders': pending_orders,
+        'unpaid_orders': unpaid_orders,
+        'orders_to_deliver': orders_to_deliver,
+        'completed_orders': completed_orders,
     }
     return render(request, 'edit-profile.html', context)
 
 
 def about_view(request):
-    return render(request, "about.html")
+    pending_orders = get_pending_orders(request)
+    unpaid_orders = get_unpaid_orders(request)
+    orders_to_deliver = get_orders_to_deliver(request)
+    completed_orders = get_completed_orders(request)
+
+    context = {
+        'pending_orders': pending_orders,
+        'unpaid_orders': unpaid_orders,
+        'orders_to_deliver': orders_to_deliver,
+        'completed_orders': completed_orders,
+    }
+    return render(request, "about.html", context)
 
 
 def contact_view(request):
+    pending_orders = get_pending_orders(request)
+    unpaid_orders = get_unpaid_orders(request)
+    orders_to_deliver = get_orders_to_deliver(request)
+    completed_orders = get_completed_orders(request)
+
     if request.method == 'POST':
         name = request.POST['name']
         email_add = request.POST['email']
@@ -195,13 +312,32 @@ def contact_view(request):
 
         messages.success(request, "Feedback sent successfully.")
 
-        return render(request, 'contact.html')
+        context = {
+            'pending_orders': pending_orders,
+            'unpaid_orders': unpaid_orders,
+            'orders_to_deliver': orders_to_deliver,
+            'completed_orders': completed_orders,
+        }
 
-    return render(request, 'contact.html')
+        return render(request, 'contact.html', context)
+
+    context = {
+        'pending_orders': pending_orders,
+        'unpaid_orders': unpaid_orders,
+        'orders_to_deliver': orders_to_deliver,
+        'completed_orders': completed_orders,
+    }
+
+    return render(request, 'contact.html', context)
 
 
 @login_required
 def account_settings(request):
+    pending_orders = get_pending_orders(request)
+    unpaid_orders = get_unpaid_orders(request)
+    orders_to_deliver = get_orders_to_deliver(request)
+    completed_orders = get_completed_orders(request)
+
     user = request.user
 
     information_form = AccountInformationForm(instance=user)
@@ -226,10 +362,20 @@ def account_settings(request):
             context = {
                 'information_form': information_form,
                 'password_form': password_form,
+
+                'pending_orders': pending_orders,
+                'unpaid_orders': unpaid_orders,
+                'orders_to_deliver': orders_to_deliver,
+                'completed_orders': completed_orders,
             }
             return render(request, 'settings.html', context)
     context = {
         'information_form': information_form,
         'password_form': password_form,
+
+        'pending_orders': pending_orders,
+        'unpaid_orders': unpaid_orders,
+        'orders_to_deliver': orders_to_deliver,
+        'completed_orders': completed_orders,
     }
     return render(request, 'settings.html', context)
