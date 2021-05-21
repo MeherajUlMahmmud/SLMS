@@ -74,6 +74,11 @@ def stu_book_detail_view(request, slug):
     student = StudentProfileModel.objects.get(user=request.user)
     book = BookModel.objects.get(slug=slug)
 
+    is_ordered = False
+    order = OrderModel.objects.get(book=book, student=student)
+    if order is not None and not order.is_completed:
+        is_ordered = True
+
     form = ConfirmOrderForm()
     if request.method == 'POST':
         form = ConfirmOrderForm(request.POST)
@@ -89,6 +94,7 @@ def stu_book_detail_view(request, slug):
             context = {
                 'book': book,
                 'form': form,
+                'is_ordered': is_ordered,
 
                 'pending_orders': pending_orders,
                 'unpaid_orders': unpaid_orders,
@@ -99,6 +105,7 @@ def stu_book_detail_view(request, slug):
     context = {
         'book': book,
         'form': form,
+        'is_ordered': is_ordered,
 
         'pending_orders': pending_orders,
         'unpaid_orders': unpaid_orders,
