@@ -69,7 +69,7 @@ def get_orders_to_deliver(request):
                              if item.student.user == request.user
                              and item.is_approved
                              and not item.is_canceled
-                             and not item.publisher_paid_approval
+                             and item.publisher_paid_approval
                              and item.student_paid_approval
                              and not item.is_completed]
     elif request.user.is_authenticated and request.user.is_publisher:
@@ -82,7 +82,7 @@ def get_orders_to_deliver(request):
         orders_to_deliver = [item for item in final_order_list
                              if item.is_approved
                              and not item.is_canceled
-                             and not item.publisher_paid_approval
+                             and item.publisher_paid_approval
                              and item.student_paid_approval
                              and not item.is_completed]
     return orders_to_deliver
