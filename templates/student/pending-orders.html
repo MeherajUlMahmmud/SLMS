@@ -28,6 +28,52 @@
                         <strong>Total Due Amount: </strong>{{ order_item.price }} BDT<br/>
                     </p>
 
+
+                    <!-- Modal -->
+                    <div
+                            class="modal fade"
+                            id="modal-order-{{ order_item.id }}"
+                            tabindex="-1"
+                            aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Order Cancellation</h5>
+                                    <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-mdb-dismiss="modal"
+                                            aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h3>Cancel this order? </h3>
+                                    <div class="card-body">
+                                        <form method="GET" action="">
+                                            <input name="orderID" type="text" value="{{ order_item.id }}" hidden/>
+
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <input type="submit" name="cancelOrder"
+                                                           class="btn btn-danger btn-block"
+                                                           value="Confirm Cancellation"/>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <button type="button" class="btn btn-outline-danger btn-block"
+                                                            data-mdb-dismiss="modal">
+                                                        Do not Cancel Order
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-6">
                             <button
@@ -35,7 +81,7 @@
                                     class="btn btn-danger mb-3"
                                     data-mdb-ripple-color="#000000"
                                     data-mdb-toggle="modal"
-                                    data-mdb-target="#exampleModal">Cancel Order
+                                    data-mdb-target="#modal-order-{{ order_item.id }}">Cancel Order
                             </button>
 
                         </div>
@@ -55,51 +101,6 @@
             </div>
         </div>
 
-
-        <!-- Modal -->
-        <div
-                class="modal fade"
-                id="exampleModal"
-                tabindex="-1"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Order Cancellation</h5>
-                        <button
-                                type="button"
-                                class="btn-close"
-                                data-mdb-dismiss="modal"
-                                aria-label="Close"
-                        ></button>
-                    </div>
-                    <div class="modal-body">
-                        <h3>Cancel this order? </h3>
-                        <div class="card-body">
-                            <form method="GET" action="">
-                                <input name="orderID" type="text" value="{{ order_item.id }}" hidden/>
-
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <input type="submit" name="cancelOrder"
-                                               class="btn btn-danger btn-block"
-                                               value="Confirm Cancellation"/>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <button type="button" class="btn btn-outline-danger btn-block"
-                                                data-mdb-dismiss="modal">
-                                            Do not Cancel Order
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
         {% endfor %}
         {% endif %}
     </div>
