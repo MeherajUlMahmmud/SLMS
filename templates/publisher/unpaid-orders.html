@@ -45,6 +45,10 @@
                         {% endifnotequal %}
                         {% endif %}
 
+                        {% if order_item.student_paid_approval %}
+                        <p class="note note-success">Student confirmed payment.</p>
+                        {% endif %}
+
 
                     </p>
 
