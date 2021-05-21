@@ -178,7 +178,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-12">
                         <button class="btn btn-block btn-primary btn-md" type="submit">Update Profile</button>
                     </div>
@@ -194,19 +194,19 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
-<!--    $("#id_varsity_name").change(function () {-->
-<!--        var url = $("#profileEditForm").attr("data-departments-url");-->
-<!--        var university = $(this).val();-->
-<!--        $.ajax({-->
-<!--            url: url,-->
-<!--            data: {-->
-<!--                'university': university-->
-<!--            },-->
-<!--            success: function (data) {-->
-<!--                $("#id_department_name").html(data);-->
-<!--            }-->
-<!--        });-->
-<!--    });-->
+    $("#id_varsity_name").change(function () {
+        var url = $("#profileEditForm").attr("data-departments-url");
+        var university = $(this).val();
+        $.ajax({
+            url: url,
+            data: {
+                'university': university
+            },
+            success: function (data) {
+                $("#id_department_name").html(data);
+            }
+        });
+    });
 
 <!--    $("#id_department_name").change(function () {-->
 <!--        var departmentId = $("#id_department_name").val();-->
