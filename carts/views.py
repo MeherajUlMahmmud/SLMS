@@ -110,7 +110,6 @@ def publisher_completed_orders_view(request):
     completed_orders = get_completed_orders(request)
 
     context = {
-
         'pending_orders': pending_orders,
         'unpaid_orders': unpaid_orders,
         'orders_to_deliver': orders_to_deliver,
@@ -133,7 +132,6 @@ def student_pending_order_view(request):
         return redirect('student-pending-orders')
 
     context = {
-
         'pending_orders': pending_orders,
         'unpaid_orders': unpaid_orders,
         'orders_to_deliver': orders_to_deliver,
@@ -162,7 +160,6 @@ def student_unpaid_order_view(request):
         return redirect('student-unpaid-orders')
 
     context = {
-
         'pending_orders': pending_orders,
         'unpaid_orders': unpaid_orders,
         'orders_to_deliver': orders_to_deliver,
@@ -179,7 +176,6 @@ def student_orders_to_deliver_view(request):
     completed_orders = get_completed_orders(request)
 
     context = {
-
         'pending_orders': pending_orders,
         'unpaid_orders': unpaid_orders,
         'orders_to_deliver': orders_to_deliver,
@@ -196,7 +192,6 @@ def student_completed_orders_view(request):
     completed_orders = get_completed_orders(request)
 
     context = {
-
         'pending_orders': pending_orders,
         'unpaid_orders': unpaid_orders,
         'orders_to_deliver': orders_to_deliver,
