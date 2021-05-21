@@ -3,119 +3,118 @@
 {% load widget_tweaks %}
 {% load static %}
 {% block content %}
-<main class="page-content">
-            <div class="container">
-                <!-- start product slider section  -->
-                <section>
-                    <div class="container my-5">
 
-                        <!-- start product details breadcrumb section  -->
-                        <nav aria-label="breadcrumb" class="mb-5">
-                            <ol class="breadcrumb" style="background-color: #fff!important;">
-                                <li class="breadcrumb-item text-uppercase">
-                                    <a style="text-decoration: none; color: #555;" href="{% url 'books:book_list' %}">Home</a>
-                                </li>
-                                <li class="breadcrumb-item active text-uppercase" aria-current="page">{% if department %}{{ department.name }}{% else %}All Departments{% endif %}
-                                </li>
-                            </ol>
-                        </nav>
-                        <!-- end product details breadcrumb section  -->
+<div class="container">
+    <div class="row">
 
-                        <!-- start slide section  -->
-                        <div class="row">
+        <div class="col-md-6">
 
-                           <div class="col-lg-5 col-md-5 col-sm-5">
-                                <img id="featured" src="{% if book.image %}{{ book.image.url }}{% else %}{% static ' img/no_image.png ' %}{% endif %}" class="img-fluid" alt="">
-                            </div>
-
-                            <div class="col-lg-7 col-md-6 col-sm-12">
-                                <h2 style="color: #555; font-weight:bold ">{{ book.name }}</h2>
-                                <div class="is-divider small"></div>
-                                <p class="price product-page-price price-on-sale">
-                                    <!--<del><span class="amount">$39.99</span></del>-->
-                                    <span><span>$</span>{{ book.price }}</span>
-                                </p>
-                                <div class="row mt-4">
-                                    <div class="col-lg-4 col-md-5 col-sm-12">
-                                        <div class="div input-group d-flex mt-2">
-                                            <button type="button" id="btnRemove" class="minus btn btn-default">
-                                                <i class="fa fa-minus" aria-hidden="true"></i>
-                                            </button>
-                                            <input type="text" id="count" name="quantity"
-                                                   class="form-control input-number text-center" value="1">
-                                            <button type="button" id="btnAdd" class="plus btn mr-2">
-                                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8 col-md-7 col-sm-12 button">
-                                        <button class="btn btn-lg btn-default ms-3  add-to-cart">Add to cart
-                                        </button>
-                                        <button class="btn btn-lg btn-default ms-2   buy-now">Buy Now</button>
-                                    </div>
-                                </div>
-
-                               </div>
-                        </div>
-
-
-                    </div>
-                </section>
-
-                <!-- end slide section  -->
-
-                <!-- start Description section  -->
-                <section class="des-area my-5">
-                    <div class="container">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active text-uppercase" id="home-tab" style="color: #353535; font-weight: bold;" data-bs-toggle="tab" data-bs-target="#home" type="button" r ole="tab" aria-controls="home" aria-selected="true">
-                                    description
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link text-uppercase" style="color: #353535; font-weight: bold;" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">
-                                    Reviews(0)
-                                </button>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-
-                                <div class="container description">
-                                    <div class="row">
-                                        <div class="col-lg-12 col-md-12 col-sm-12">
-                                        </div>
-                                        <div class="col-lg-12 col-md-12 col-sm-12">
-                                            <ul>
-                                                <li>
-                                                    <p>{{ book.description }}</p>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                                <div class="container reviews">
-                                    <div class="row">
-                                        <div class="col-lg-12 col-md-12 col-sm-12">
-                                            <h4>Reviews</h4>
-                                            <p>There are no reviews yet</p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <!-- start Description section  -->
+            <div class="card mb-4 mt-4">
+                {% if book.image %}
+                <img src="{{ book.image.url }}"
+                     class="card-img-top"
+                     alt="{{ book.name }}"
+                />
+                {% else %}
+                <img
+                        src="{% static 'assets/images/placeholder.png' %}"
+                        class="card-img-top"
+                        alt="{{ book.name }}"
+                />
+                {% endif %}
 
             </div>
 
-        </main>
-        <!-- page-content" -->
+        </div>
+
+        <div class="col-md-6 mt-4">
+
+            <div class="row">
+
+                <div class="col-6">
+                    <button
+                            type="button"
+                            class="btn btn-block btn-primary btn-md"
+                            data-mdb-ripple-color="#000000"
+                            data-mdb-toggle="modal"
+                            data-mdb-target="#exampleModal">Order Book
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="row mt-4">
+
+                <div class="card">
+                    <div class="card-header">
+                        <p><strong>University: </strong>{{ book.university }}</p>
+                        <p><strong>Department: </strong>{{ book.department }}</p>
+                        <p><strong>Course: </strong>{{ book.course }}</p>
+                        <br/>
+                        <p><strong>Author: </strong>{{ book.author }}</p>
+                        <p><strong>Edition: </strong>{{ book.edition }} edition</p>
+                        <p><strong>Price: </strong>{{ book.price }} BDT</p>
+                    </div>
+                    <div class="card-body">
+
+                        <p class="card-text note note-info">
+                            <strong>Description: </strong>{{ book.description|linebreaksbr }}
+                        </p>
+
+                        <div class="card-footer">Posted: {{ book.created }}</div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Posted by <a href="{% url 'profile' book.publisher.user.id %}" class="text-info mr-2">
+                        {{ book.publisher.user.name }}</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Order <b>{{ book.name }}</b> Book?
+                </h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-mdb-dismiss="modal"
+                        aria-label="Close"
+                ></button>
+
+            </div>
+            <div class="modal-body">
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="row form-group">
+                        <div class="col-md-12 mb-3">
+                            <label>Add an Additional Note</label>
+                            {{ form.additional_note|add_class:"form-control" }}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg btn-block">
+                        Save Order
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
