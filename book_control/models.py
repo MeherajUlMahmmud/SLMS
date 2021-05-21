@@ -14,7 +14,7 @@ class DepartmentModel(models.Model):
     department = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.department
+        return self.department + " - " + self.university.university
 
 
 class CourseModel(models.Model):
@@ -23,7 +23,7 @@ class CourseModel(models.Model):
     course = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.course
+        return self.course + " - " + self.university.university
 
 
 class BookModel(models.Model):
