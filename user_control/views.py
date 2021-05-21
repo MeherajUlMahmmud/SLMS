@@ -103,9 +103,19 @@ def student_dashboard_view(request):
     orders_to_deliver = get_orders_to_deliver(request)
     completed_orders = get_completed_orders(request)
 
-    books = BookModel.objects.all()
+    user = request.user
+    student = StudentProfileModel.objects.get(user=user)
+    if student.department_name:
+        department = student.department_name
+    if student.varsity_name:
+        varsity = student.varsity_name
 
-    # print(profile.department_name)
+    books = None
+    if student.department_name and student.varsity_name:
+        books = BookModel.objects.filter(university=varsity, department=department)
+
+    # books = BookModel.objects.all()
+    print(books)
     context = {
         'book_list': books,
 
