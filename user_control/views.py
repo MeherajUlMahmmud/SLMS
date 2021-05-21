@@ -152,6 +152,8 @@ def profile_view(request, pk):
 
     if user.is_publisher:
         profile = PublisherProfileModel.objects.get(user=user)
+        books = BookModel.objects.filter(publisher=profile)
+        orders = OrderModel.objects.filter(book__in=list(books), is_completed=True)
 
         location_link = "https://maps.google.com/maps?width=100%25&amp;height=450&amp;hl=en&amp;q="
 
@@ -167,6 +169,8 @@ def profile_view(request, pk):
         context = {
             'user': user,
             'profile': profile,
+            'books': books,
+            'orders': orders,
             'location_link': location_link,
 
             'pending_orders': pending_orders,
@@ -176,10 +180,12 @@ def profile_view(request, pk):
         }
     elif user.is_student:
         profile = StudentProfileModel.objects.get(user=user)
+        orders = OrderModel.objects.filter(student=profile, is_completed=True)
 
         context = {
             'user': user,
             'profile': profile,
+            'orders': orders,
 
             'pending_orders': pending_orders,
             'unpaid_orders': unpaid_orders,
