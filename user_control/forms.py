@@ -54,13 +54,19 @@ class PublisherRegistrationForm(UserCreationForm):
 
 
 class StudentProfileUpdateForm(forms.ModelForm):
-    # varsity_name = forms.ModelChoiceField(queryset=UniversityModel.objects.all())
+    varsity_name = forms.ModelChoiceField(queryset=UniversityModel.objects.all())
     # department_name = forms.ChoiceField()
     birth_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
 
     class Meta:
         model = StudentProfileModel
         fields = ('image', 'phone', 'varsity_name', 'department_name', 'gender', 'address', 'birth_date')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['varsity_name'].required = True
+        self.fields['department_name'].required = True
+        self.fields['birth_date'].required = False
 
 
 class PublisherProfileUpdateForm(forms.ModelForm):
