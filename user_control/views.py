@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.utils.text import slugify
 from .forms import *
@@ -105,22 +106,41 @@ def student_dashboard_view(request):
 
     user = request.user
     student = StudentProfileModel.objects.get(user=user)
-    department_found = False
+
+    department = None
     if student.department_name:
         department = student.department_name
-        dept_name = DepartmentModel.objects.filter(department=department)
-        if dept_name.exists():
-            department_found = True
+
+    varsity = None
     if student.varsity_name:
         varsity = student.varsity_name
 
-    # books = None
-    # if student.department_name and student.varsity_name and department_found:
-    #     books = BookModel.objects.filter(university=varsity, department=department)
-
     books = BookModel.objects.all()
-    book_list = [book for book in books if book.university.university == varsity
-                 and book.department.department == department]
+    if student.department_name and student.varsity_name:
+        book_list = [book for book in books
+                     if book.university.university == varsity
+                     and book.department.department == department]
+    else:
+        book_list = None
+
+    search_keyword = request.GET.get('q')
+
+    if search_keyword is not None:
+        books = BookModel.objects.filter(Q(name__icontains=search_keyword))
+        book_list = [book for book in books
+                     if book.university.university == varsity
+                     and book.department.department == department]
+        context = {
+            'department': department,
+            'varsity': varsity,
+            'book_list': book_list,
+
+            'pending_orders': pending_orders,
+            'unpaid_orders': unpaid_orders,
+            'orders_to_deliver': orders_to_deliver,
+            'completed_orders': completed_orders,
+        }
+        return render(request, 'student/student-dashboard.html', context)
 
     context = {
         'department': department,
