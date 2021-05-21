@@ -152,7 +152,7 @@ def student_unpaid_order_view(request):
     if request.GET.get('submitPayment'):
         item_id = int(request.GET.get('orderID'))
         order_item = OrderModel.objects.get(id=item_id)
-        order_item.customer_paid_approval = True
+        order_item.student_paid_approval = True
         order_item.save()
 
         transactionID = request.GET.get('transactionID')
