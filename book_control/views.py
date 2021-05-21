@@ -74,8 +74,12 @@ def stu_book_detail_view(request, slug):
     student = StudentProfileModel.objects.get(user=request.user)
     book = BookModel.objects.get(slug=slug)
 
+    order = None
     is_ordered = False
-    order = OrderModel.objects.get(book=book, student=student)
+    try:
+        order = OrderModel.objects.get(book=book, student=student)
+    except:
+        order = None
     if order is not None and not order.is_completed:
         is_ordered = True
 
