@@ -105,18 +105,24 @@ def student_dashboard_view(request):
 
     user = request.user
     student = StudentProfileModel.objects.get(user=user)
+    department_found = False
     if student.department_name:
         department = student.department_name
+        dept_name = DepartmentModel.objects.filter(department=department)
+        if dept_name.exists():
+            department_found = True
     if student.varsity_name:
         varsity = student.varsity_name
 
-    books = None
-    if student.department_name and student.varsity_name:
-        books = BookModel.objects.filter(university=varsity, department=department)
+    # books = None
+    # if student.department_name and student.varsity_name and department_found:
+    #     books = BookModel.objects.filter(university=varsity, department=department)
 
-    # books = BookModel.objects.all()
-    print(books)
+    books = BookModel.objects.all()
+
     context = {
+        'department': department,
+        'varsity': varsity,
         'book_list': books,
 
         'pending_orders': pending_orders,
