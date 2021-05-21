@@ -21,9 +21,9 @@
 <body style="background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark " style="background-color:#192f59;">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">SLMS</a>
+        <a class="navbar-brand" href="{% url 'home' %}">Smart Library Management System</a>
 
         <button
                 class="navbar-toggler"
@@ -39,18 +39,18 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    <a class="nav-link text-white" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'about' %}">About</a>
+                    <a class="nav-link text-white" href="{% url 'about' %}">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+                    <a class="nav-link text-white" href="{% url 'contact' %}">Contact</a>
                 </li>
 
                 {% if request.user.is_authenticated %}
                 <li class="nav-item dropdown">
-                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link text-white dropdown-toggle"
                        data-mdb-toggle="dropdown"
                        href="#" id="navbarDropdownMenuLink1" role="button">
                         Orders
@@ -91,6 +91,7 @@
             {% if request.user.is_authenticated %}
 
             <ul class="navbar-nav ms-auto">
+                {% if request.user.is_student %}
                 <li class="nav-item">
                     <form method="GET">
                         <div class="input-group">
@@ -99,7 +100,7 @@
                                        {% if search_keyword %}
                                        value="{{ search_keyword }}"
                                        {% endif %}>
-                                <label class="form-label">Search Books</label>
+                                <label class="form-label text-white">Search Books</label>
                             </div>
                             <button id="search-button" type="button" class="btn btn-primary">
                                 <i class="fas fa-search"></i>
@@ -107,6 +108,7 @@
                         </div>
                     </form>
                 </li>
+                {% endif %}
 
                 <li class="nav-item dropdown">
                     <a aria-expanded="false" aria-haspopup="true"
@@ -133,12 +135,12 @@
 
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link btn btn-dark text-white me-2" href="{% url 'login' %}">Login</a>
+                    <a class="nav-link text-white me-2" href="{% url 'login' %}">Login</a>
                 </li>
 
                 <li class="nav-item dropdown">
                     <a aria-expanded="false" aria-haspopup="true"
-                       class="nav-link dropdown-toggle btn btn-dark text-white"
+                       class="nav-link dropdown-toggle text-white"
                        data-mdb-toggle="dropdown"
                        href="#" id="navbarDropdownMenuLink" role="button">
                         SignUp
