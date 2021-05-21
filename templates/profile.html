@@ -14,8 +14,8 @@
         <div class="col-md-4">
 
             <div class="card mb-3">
-                {% if profile.image %}
-                <img alt="{{ user.name }}" class="card-img-top" src="{{ profile.image.url }}">
+                {% if profile.logo %}
+                <img alt="{{ user.name }}" class="card-img-top" src="{{ profile.logo.url }}">
                 {% else %}
                 <img alt="{{ user.name }}" class="card-img-top" src="{% static 'others/img/no_image.png' %}">
                 {% endif %}
@@ -194,7 +194,6 @@
 
 {% elif user.is_student %}
 <div class="row">
-
     <div class="col-md-4">
 
         <div class="card mb-3">
@@ -207,7 +206,9 @@
             <div class="card-body">
                 <h2 class="card-title">{{ user.name }}</h2>
                 Email: <a href="mailto:{{user.email}}">{{ user.email }}</a><br/>
-                Mobile: <a href="tel:{{profile.phone}}">{{ profile.phone }}</a>
+                Mobile: <a href="tel:{{profile.phone}}">{{ profile.phone }}</a><br/><br/>
+                University: {{ profile.varsity_name }}<br/>
+                Department: {{ profile.department_name }}<br/>
             </div>
             <div class="card-footer text-muted" style="text-align: center">
                 Member Since {{user.date_joined.date}}
@@ -223,7 +224,6 @@
         </div>
 
     </div>
-
 
     <div class="col-md-8">
 
