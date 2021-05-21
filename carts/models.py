@@ -4,7 +4,7 @@ from book_control.models import BookModel
 
 
 class OrderModel(models.Model):
-    student = models.ForeignKey(StudentProfileModel, on_delete=models.SET_NULL, null=True, blank=True)
+    student = models.ForeignKey(StudentProfileModel, on_delete=models.CASCADE, null=True, blank=True)
     book = models.ForeignKey(BookModel, null=True, blank=True, on_delete=models.SET_NULL)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     additional_note = models.TextField(null=True, blank=True)
@@ -20,7 +20,7 @@ class OrderModel(models.Model):
 
 
 class OrderPaymentModel(models.Model):
-    order = models.ForeignKey(OrderModel, null=True, blank=True, on_delete=models.SET_NULL)
+    order = models.OneToOneField(OrderModel, null=True, blank=True, on_delete=models.CASCADE)
     transaction_id = models.CharField(max_length=50, null=True, blank=True)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     date_time = models.DateTimeField(auto_now_add=True)
