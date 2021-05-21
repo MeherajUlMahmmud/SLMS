@@ -28,6 +28,8 @@
                                     src="{{ book.image.url }}"
                                     class="card-img-top"
                                     alt="{{ book.name }}"
+                                    height="300px"
+                                    width="100px"
                             />
                             {% else %}
                             <img
@@ -47,7 +49,7 @@
                         </div>
 
                         <div class="card-header">
-                            <h5 class="card-title fs-6"><strong>Title: </strong>{{ book.name }}</h5>
+                            <h5 class="card-title fs-6">{{ book.name }}</h5>
                         </div>
                         <div class="card-body">
                             <p class="card-text fs-6">
