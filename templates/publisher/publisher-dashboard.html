@@ -27,13 +27,13 @@
                             <img
                                     src="{{ book.image.url }}"
                                     class="card-img-top"
-                                    alt="..."
+                                    alt="{{ book.name }}"
                             />
                             {% else %}
                             <img
-                                    src="{% static 'assets/images/placeholder.png' %}"
+                                    src="{% static 'others/img/no_image.png' %}"
                                     class="card-img-top"
-                                    alt="..."
+                                    alt="{{ book.name }}"
                             />
                             {% endif %}
 
