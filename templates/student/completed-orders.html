@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %} - Completed Orders{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+
+        {% if not completed_orders %}
+        <h3 class="mt-3">No Completed Orders Yet</h3>
+
+        {% else %}
+        {% for order_item in completed_orders %}
+        <div class="col-auto mt-4">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                    <h5 class="card-title fs-6 mt-2"><strong>Order ID: </strong>{{ order_item.id }}</h5>
+                </div>
+
+                <div class="card-body">
+                    <p class="card-text fs-6">
+                        <strong>Publisher: </strong>{{ order_item.book.publisher.user.name }}<br/>
+                        <strong>Ordered Book: </strong>
+                        <a href="{% url 'stu-book-detail' order_item.book.slug %}">
+                            {{ order_item.book.name }}
+                        </a><br/>
+                        <strong>Total Amount: </strong>{{ order_item.price }} BDT<br/>
+                    </p>
+                    <p class="note note-success">Order Completed</p>
+
+                    <div class="card-footer">
+                        <p class="fs-6">Ordered: {{ order_item.date_ordered|timesince }} ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
