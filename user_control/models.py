@@ -72,6 +72,9 @@ class StudentProfileModel(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     phone = models.CharField(max_length=255, null=True, blank=True)
 
+    def __str__(self):  # when i create a user object, and call it, what will show
+        return self.user.name
+
 
 class PublisherProfileModel(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
