@@ -12,7 +12,11 @@ from .utils import *
 @login_required
 def order_details_view(request, pk):
     order_item = OrderModel.objects.get(id=pk)
-    order_payment_item = OrderPaymentModel.objects.get(order=order_item)
+    order_payment_item = None
+    try:
+        order_payment_item = OrderPaymentModel.objects.get(order=order_item)
+    except:
+        order_payment_item = None
     book = order_item.book
 
     is_student = False
@@ -23,6 +27,7 @@ def order_details_view(request, pk):
     unpaid_orders = get_unpaid_orders(request)
     orders_to_deliver = get_orders_to_deliver(request)
     completed_orders = get_completed_orders(request)
+    print(order_payment_item)
 
     if request.GET.get('confirmPayment'):
         order_item.publisher_paid_approval = True
@@ -52,6 +57,7 @@ def publisher_unchecked_order_view(request):
 
     if request.GET.get('acceptOrder'):
         item_id = int(request.GET.get('orderID'))
+        print(item_id)
         order_item = OrderModel.objects.get(id=item_id)
         order_item.is_approved = True
         order_item.save()
