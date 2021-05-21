@@ -40,10 +40,8 @@ def get_unpaid_orders(request):
         order_queryset = OrderModel.objects.filter(student=student)
         order_list = list(order_queryset)
         unpaid_orders = [item for item in order_list
-                         if item.student.user == request.user
-                         and item.is_approved
+                         if item.is_approved
                          and not item.is_canceled
-                         and not item.student_paid_approval
                          and not item.publisher_paid_approval
                          and not item.is_completed]
     elif request.user.is_authenticated and request.user.is_publisher:
@@ -57,7 +55,6 @@ def get_unpaid_orders(request):
                          if item.is_approved
                          and not item.is_canceled
                          and not item.publisher_paid_approval
-                         and not item.student_paid_approval
                          and not item.is_completed]
     return unpaid_orders
 
