@@ -63,9 +63,11 @@
                     <p><strong>Price: </strong>{{ order_item.book.price }}</p>
                     <p><strong>Order Amount: </strong>{{ order_item.price }}</p>
                     <hr/>
+                    {% if not is_student and order_payment_item is not None %}
                     <p><strong>Payment Completed: </strong>{{ order_payment_item.date_time }}</p>
                     <p><strong>Transaction ID: </strong>{{ order_payment_item.transaction_id }}</p>
                     <p><strong>Phone Number: </strong>{{ order_payment_item.phone_number }}</p>
+
                     {% if not order_item.publisher_paid_approval %}
                     <form method="get">
                         <input
@@ -76,6 +78,9 @@
                     </form>
                     {% endif %}
 
+                    {% endif %}
+
+
                 </div>
 
                 <div class="card-body">
@@ -84,9 +89,9 @@
                         <strong>Additional Note: </strong>{{ order_item.additional_note|linebreaksbr }}
                     </p>
 
-                    <div class="card-footer">Posted by <a href="#">
+                    <div class="card-footer">Ordered by <a href="#">
                         {{ order_item.student.user.name }}</a>,
-                        {{ ad_item.date_ordered|timesince }} ago
+                        {{ order_item.date_ordered|timesince }} ago
                     </div>
 
                 </div>
