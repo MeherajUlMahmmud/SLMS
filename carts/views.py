@@ -28,7 +28,7 @@ def order_details_view(request, pk):
         'orders_to_deliver': orders_to_deliver,
         'completed_orders': completed_orders,
     }
-    return render(request, 'user_control/order-details.html', context)
+    return render(request, 'order-details.html', context)
 
 
 @login_required
