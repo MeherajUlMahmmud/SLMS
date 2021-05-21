@@ -47,29 +47,29 @@
                     </p>
 
                     <div class="row">
-                        <div class="col-6">
-                            <form method="get">
+                        <form method="get">
+                            <div class="row">
+                            <div class="col-6">
                                 <input name="orderID" type="text" value="{{ order_item.id }}" hidden/>
                                 <input
                                         type="submit"
                                         name="acceptOrder"
                                         class="btn btn-success mb-2"
                                         value="Accept"/>
-                            </form>
-                        </div>
-                        <div class="col-6">
-                            <form method="get">
+                            </div>
+                            <div class="col-6">
                                 <input
                                         type="submit"
                                         name="rejectOrder"
                                         class="btn btn-danger mb-2"
                                         value="Reject"/>
-                            </form>
-                        </div>
+                            </div>
+                            </div>
+                        </form>
                     </div>
 
                     <div class="card-footer">
-                        <p class="fs-6">Ordered: {{ order_item.date_ordered|timesince }} ago</p>
+                        <p class="fs-6"><b>Ordered:</b> {{ order_item.date_ordered }}</p>
                     </div>
                 </div>
             </div>
