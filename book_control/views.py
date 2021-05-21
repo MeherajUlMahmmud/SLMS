@@ -81,8 +81,7 @@ def stu_book_detail_view(request, slug):
             new_order = form.save(commit=False)
             new_order.student = student
             new_order.book = book
-
-            new_order.price_rate = book.price
+            new_order.price = book.price
 
             form.save()
             return redirect('home')
