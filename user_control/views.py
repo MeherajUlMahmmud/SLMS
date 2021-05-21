@@ -119,11 +119,13 @@ def student_dashboard_view(request):
     #     books = BookModel.objects.filter(university=varsity, department=department)
 
     books = BookModel.objects.all()
+    book_list = [book for book in books if book.university.university == varsity
+                 and book.department.department == department]
 
     context = {
         'department': department,
         'varsity': varsity,
-        'book_list': books,
+        'book_list': book_list,
 
         'pending_orders': pending_orders,
         'unpaid_orders': unpaid_orders,
