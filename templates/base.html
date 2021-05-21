@@ -64,10 +64,10 @@
                             <span class="badge bg-primary ms-2">{{ unpaid_orders|length }}</span></a>
 
                         <a class="dropdown-item" href="{% url 'publisher-orders-to-deliver' %}">Orders to Deliver
-                            <span class="badge bg-primary ms-2">{{ ads_to_run|length }}</span></a>
+                            <span class="badge bg-primary ms-2">{{ orders_to_deliver|length }}</span></a>
 
                         <a class="dropdown-item" href="{% url 'publisher-completed-orders' %}">Completed Orders
-                            <span class="badge bg-primary ms-2">{{ finished_ads|length }}</span></a>
+                            <span class="badge bg-primary ms-2">{{ completed_orders|length }}</span></a>
                     </div>
                     {% elif request.user.is_student %}
                     <div aria-labelledby="navbarDropdownMenuLink1" class="dropdown-menu">
@@ -78,10 +78,10 @@
                             <span class="badge bg-primary ms-2">{{ unpaid_orders|length }}</span></a>
 
                         <a class="dropdown-item" href="{% url 'student-orders-to-deliver' %}">Orders to Deliver
-                            <span class="badge bg-primary ms-2">{{ ads_to_run|length }}</span></a>
+                            <span class="badge bg-primary ms-2">{{ orders_to_deliver|length }}</span></a>
 
                         <a class="dropdown-item" href="{% url 'student-completed-orders' %}">Completed Orders
-                            <span class="badge bg-primary ms-2">{{ finished_ads|length }}</span></a>
+                            <span class="badge bg-primary ms-2">{{ completed_orders|length }}</span></a>
                     </div>
                     {% endif %}
                 </li>
