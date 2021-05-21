@@ -12,16 +12,28 @@ from .utils import *
 @login_required
 def order_details_view(request, pk):
     order_item = OrderModel.objects.get(id=pk)
+    order_payment_item = OrderPaymentModel.objects.get(order=order_item)
     book = order_item.book
+
+    is_student = False
+    if request.user.is_student:
+        is_student = True
 
     pending_orders = get_pending_orders(request)
     unpaid_orders = get_unpaid_orders(request)
     orders_to_deliver = get_orders_to_deliver(request)
     completed_orders = get_completed_orders(request)
 
+    if request.GET.get('confirmPayment'):
+        order_item.publisher_paid_approval = True
+        order_item.save()
+        return redirect('publisher-unpaid-orders')
+
     context = {
         'order_item': order_item,
+        'order_payment_item': order_payment_item,
         'book': book,
+        'is_student': is_student,
 
         'pending_orders': pending_orders,
         'unpaid_orders': unpaid_orders,
@@ -86,14 +98,11 @@ def publisher_orders_to_deliver_view(request):
     if request.GET.get('deliverOrder'):
         item_id = int(request.GET.get('orderID'))
         order_item = OrderModel.objects.get(id=item_id)
-        order_item.advertiser_paid_approval = True
-        order_item.is_running = True
-        order_item.is_running = True
+        order_item.is_completed = True
         order_item.save()
         return redirect('publisher-orders-to-deliver')
 
     context = {
-
         'pending_orders': pending_orders,
         'unpaid_orders': unpaid_orders,
         'orders_to_deliver': orders_to_deliver,
