@@ -36,7 +36,7 @@
                             class="btn btn-outline-success mb-3"
                             data-mdb-ripple-color="#000000"
                             data-mdb-toggle="modal"
-                            data-mdb-target="#exampleModal"> Pay Now
+                            data-mdb-target="#modal-payment-{{ order_item.id }}"> Pay Now
                     </button>
 
                     {% else %}
@@ -52,14 +52,14 @@
 
         <!-- Modal -->
         <div class="modal fade"
-             id="exampleModal"
+             id="modal-payment-{{ order_item.id }}"
              tabindex="-1"
              aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Payment Procedure {{ order_item.id }}</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Payment Procedure</h5>
                         <button
                                 type="button"
                                 class="btn-close"
@@ -71,12 +71,12 @@
                         <h3>Procedure will go here </h3>
                         <div class="card-body">
                             <form method="GET" action="">
+
                                 <div class="form-outline mb-3">
                                     <input type="text" id="transactionID" name="transactionID"
                                            class="form-control" required/>
                                     <label class="form-label">Transaction ID</label>
                                 </div>
-
 
                                 <input name="orderID" type="text" value="{{ order_item.id }}" hidden/>
 
