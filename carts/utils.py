@@ -114,7 +114,7 @@ def get_completed_orders(request):
         completed_orders = [item for item in final_order_list
                             if item.is_approved
                             and not item.is_canceled
-                            and item.advertiser_paid_approval
+                            and item.publisher_paid_approval
                             and item.student_paid_approval
                             and item.is_completed]
     return completed_orders
