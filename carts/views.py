@@ -12,11 +12,12 @@ from .utils import *
 @login_required
 def order_details_view(request, pk):
     order_item = OrderModel.objects.get(id=pk)
-    order_payment_item = None
+
     try:
         order_payment_item = OrderPaymentModel.objects.get(order=order_item)
     except:
         order_payment_item = None
+
     book = order_item.book
 
     is_student = False
