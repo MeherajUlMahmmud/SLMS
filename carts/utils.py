@@ -16,6 +16,7 @@ def get_pending_orders(request):
                           and not item.publisher_paid_approval
                           and not item.student_paid_approval
                           and not item.is_completed]
+
     elif request.user.is_authenticated and request.user.is_publisher:
         publisher = PublisherProfileModel.objects.get(user=request.user)
         book_queryset = BookModel.objects.filter(publisher=publisher)
