@@ -58,6 +58,15 @@
                         <div class="row form-group">
                             <div class="col-md-12 mb-3">
                                 {{ form.edition|add_class:"form-control" }}
+
+                                {% for message in messages %}
+                                <div class="alert alert-success">
+                                    <a class="close" data-dismiss="alert" href="#">×</a>
+
+                                    {{ message }}
+
+                                </div>
+                                {% endfor %}
                             </div>
                         </div>
 
@@ -103,7 +112,7 @@
     $("#id_department").change(function () {
         var url = $("#bookform").attr("data-courses-url");
         var departmentId = $(this).val();
-        var university = $("#id_department").val();
+        var university = $("#id_university").val();
         $.ajax({
             url: url,
             data: {
@@ -115,6 +124,7 @@
             }
         });
     });
+
 </script>
 
 {% endblock %}
