@@ -25,6 +25,7 @@
                     Mobile: <a href="tel:{{profile.phone}}">{{ profile.phone }}</a><br/>
                     Website: <a href="{{ profile.website }}" target="_blank">
                     {{ profile.website }}</a><br/>
+                    Total Earning: {{ total_earning }} BDT<br/>
 
                 </div>
                 <div class="card-footer text-muted" style="text-align: center">
@@ -190,42 +191,51 @@
         </div>
     </div>
 
-</div>
 
-{% elif user.is_student %}
-<div class="row">
-    <div class="col-md-4">
+    {% elif user.is_student %}
+    <div class="row">
+        <div class="col-md-4">
 
-        <div class="card mb-3">
-            {% if profile.image %}
-            <img alt="{{ user.name }}" class="card-img-top" src="{{ profile.image.url }}">
-            {% else %}
-            <img alt="{{ user.name }}" class="card-img-top"
-                 src="{% static 'others/img/no_image.png' %}">
-            {% endif %}
-            <div class="card-body">
-                <h2 class="card-title">{{ user.name }}</h2>
-                Email: <a href="mailto:{{user.email}}">{{ user.email }}</a><br/>
-                Mobile: <a href="tel:{{profile.phone}}">{{ profile.phone }}</a><br/><br/>
-                University: {{ profile.varsity_name }}<br/>
-                Department: {{ profile.department_name }}<br/>
-            </div>
-            <div class="card-footer text-muted" style="text-align: center">
-                Member Since {{user.date_joined.date}}
+            <div class="card mb-3">
+
+                {% if profile.image %}
+                <img
+                        alt="{{ user.name }}"
+                        class="card-img-top"
+                        src="{{ profile.image.url }}"
+                        height="200px"
+                >
+                {% else %}
+                <img
+                        alt="{{ user.name }}"
+                        class="card-img-top"
+                        src="{% static 'others/img/no_image.png' %}"
+                        height="200px"
+                >
+                {% endif %}
+                <div class="card-body">
+                    <h2 class="card-title">{{ user.name }}</h2>
+                    Email: <a href="mailto:{{user.email}}">{{ user.email }}</a><br/>
+                    Mobile: <a href="tel:{{profile.phone}}">{{ profile.phone }}</a><br/><br/>
+                    University: {{ profile.varsity_name }}<br/>
+                    Department: {{ profile.department_name }}<br/>
+                </div>
+                <div class="card-footer text-muted" style="text-align: center">
+                    Member Since {{user.date_joined.date}}
+                </div>
+
+                {% if request.user == user %}
+                <div class="card-footer">
+                    <a class="btn btn-primary btn-block" href="{% url 'student-edit-profile' %}">
+                        <i class="fas fa-pencil-alt me-2"></i>Edit Profile
+                    </a>
+                </div>
+                {% endif %}
             </div>
 
-            {% if request.user == user %}
-            <div class="card-footer">
-                <a class="btn btn-primary btn-block" href="{% url 'student-edit-profile' %}">
-                    <i class="fas fa-pencil-alt me-2"></i>Edit Profile
-                </a>
-            </div>
-            {% endif %}
         </div>
 
-    </div>
-
-    <div class="col-md-8">
+        <div class="col-md-8">
 
             <!-- Tabs navs -->
             <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
@@ -296,9 +306,9 @@
             <hr class="mt-2 mb-2"/>
             <!-- Tabs content -->
 
+        </div>
     </div>
-</div>
-{% endif %}
+    {% endif %}
 </div>
 
 {% endblock %}
