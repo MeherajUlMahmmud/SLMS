@@ -182,6 +182,9 @@ def update_book_view(request, pk):
 
         if form.is_valid():
             obj = form.save()
+            slug_str = "%s %s" % (obj.name, obj.edition)
+            obj.slug = slugify(slug_str)
+            obj.save()
             return redirect('pub-book-detail', obj.slug)
         else:
             print("Error: Form Invalid")
@@ -212,14 +215,19 @@ def update_book_view(request, pk):
 
 def load_departments(request):
     university = request.GET.get('university')
-    print(university)
+    # print(university)
     departments = DepartmentModel.objects.filter(university=university)
     return render(request, 'departments.html', {'departments': departments})
 
 
 def load_courses(request):
-    university = request.GET.get('university')
+    universityId = request.GET.get('university')
     departmentId = request.GET.get('department')
+    # print(universityId)
+    # print(departmentId)
     department = DepartmentModel.objects.get(id=departmentId)
+    # print(department)
+    university = UniversityModel.objects.get(id=universityId)
+    # print(university)
     courses = CourseModel.objects.filter(university=university, department=department)
     return render(request, 'courses.html', {'courses': courses})
