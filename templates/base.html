@@ -69,6 +69,10 @@
                         <a class="dropdown-item" href="{% url 'publisher-completed-orders' %}">Completed Orders
                             <span class="badge bg-primary ms-2">{{ completed_orders|length }}</span></a>
                     </div>
+
+
+
+
                     {% elif request.user.is_student %}
                     <div aria-labelledby="navbarDropdownMenuLink1" class="dropdown-menu">
                         <a class="dropdown-item" href="{% url 'student-pending-orders' %}">Pending Orders
