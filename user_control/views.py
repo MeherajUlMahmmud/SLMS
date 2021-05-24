@@ -97,7 +97,7 @@ def logout_view(request):
     return redirect('home')
 
 
-@login_required
+@login_required(login_url='login')
 def student_dashboard_view(request):
     pending_orders = get_pending_orders(request)
     unpaid_orders = get_unpaid_orders(request)
@@ -131,9 +131,9 @@ def student_dashboard_view(request):
                      if book.university.university == varsity
                      and book.department.department == department]
         context = {
+            'book_list': book_list,
             'department': department,
             'varsity': varsity,
-            'book_list': book_list,
 
             'pending_orders': pending_orders,
             'unpaid_orders': unpaid_orders,
@@ -155,7 +155,7 @@ def student_dashboard_view(request):
     return render(request, 'student/student-dashboard.html', context)
 
 
-@login_required
+@login_required(login_url='login')
 def publisher_dashboard_view(request):
     pending_orders = get_pending_orders(request)
     unpaid_orders = get_unpaid_orders(request)
@@ -177,7 +177,7 @@ def publisher_dashboard_view(request):
     return render(request, 'publisher/publisher-dashboard.html', context)
 
 
-@login_required
+@login_required(login_url='login')
 def profile_view(request, pk):
     pending_orders = get_pending_orders(request)
     unpaid_orders = get_unpaid_orders(request)
@@ -192,6 +192,10 @@ def profile_view(request, pk):
         profile = PublisherProfileModel.objects.get(user=user)
         books = BookModel.objects.filter(publisher=profile)
         orders = OrderModel.objects.filter(book__in=list(books), is_completed=True)
+        total_earning = 0
+        if orders:
+            for order in orders:
+                total_earning += order.price
 
         location_link = "https://maps.google.com/maps?width=100%25&amp;height=450&amp;hl=en&amp;q="
 
@@ -210,6 +214,7 @@ def profile_view(request, pk):
             'books': books,
             'orders': orders,
             'location_link': location_link,
+            'total_earning': total_earning,
 
             'pending_orders': pending_orders,
             'unpaid_orders': unpaid_orders,
@@ -234,7 +239,7 @@ def profile_view(request, pk):
     return render(request, 'profile.html', context)
 
 
-@login_required
+@login_required(login_url='login')
 def publisher_edit_profile(request):
     pending_orders = get_pending_orders(request)
     unpaid_orders = get_unpaid_orders(request)
@@ -264,7 +269,7 @@ def publisher_edit_profile(request):
     return render(request, 'edit-profile.html', context)
 
 
-@login_required
+@login_required(login_url='login')
 def student_edit_profile(request):
     pending_orders = get_pending_orders(request)
     unpaid_orders = get_unpaid_orders(request)
